@@ -25,7 +25,11 @@ export default function RootLayout({ children }) {
                      pathname === '/';
 
   return (
-    <ClerkProvider>
+    <ClerkProvider  appearance={{
+      layout: {
+        unsafe_disableDevelopmentModeWarnings: true,
+      },
+    }}>
       <html lang="en">
         <head>
           <title>InterviewPrep - AI-Powered Interview Practice</title>
