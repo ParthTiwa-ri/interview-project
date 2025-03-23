@@ -49,7 +49,7 @@ export default function InterviewDetailsPage({ params }) {
 
   if (!isLoaded || loading) {
     return (
-      <div className="max-w-4xl mx-auto px-4 py-12">
+      <div className="max-w-6xl mx-auto px-4 py-12">
         <div className="animate-pulse space-y-6">
           <div className="h-6 bg-gray-200 rounded w-1/3"></div>
           <div className="h-40 bg-gray-200 rounded"></div>
@@ -61,7 +61,7 @@ export default function InterviewDetailsPage({ params }) {
 
   if (error) {
     return (
-      <div className="max-w-4xl mx-auto px-4 py-12">
+      <div className="max-w-6xl mx-auto px-4 py-12">
         <div className="bg-red-50 text-red-700 p-4 rounded-xl">
           <h2 className="text-xl font-bold mb-2">Error</h2>
           <p>{error}</p>
@@ -78,7 +78,7 @@ export default function InterviewDetailsPage({ params }) {
 
   if (!session) {
     return (
-      <div className="max-w-4xl mx-auto px-4 py-12">
+      <div className="max-w-6xl mx-auto px-4 py-12">
         <div className="bg-white rounded-xl shadow-md p-8 text-center">
           <h2 className="text-2xl font-bold text-gray-900 mb-4">Interview not found</h2>
           <p className="text-gray-600 mb-6">
@@ -96,7 +96,7 @@ export default function InterviewDetailsPage({ params }) {
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-12">
+    <div className="max-w-6xl mx-auto px-4 py-8">
       <div className="mb-8">
         <Link 
           href="/interviews" 

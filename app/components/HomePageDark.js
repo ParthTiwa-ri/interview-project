@@ -14,7 +14,7 @@ const BackgroundGradient = ({ children, className, ...props }) => {
     >
       <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.1),transparent_50%)]" />
-      <div className="relative bg-white rounded-3xl p-8">{children}</div>
+      <div className="relative bg-gray-900 rounded-3xl p-8">{children}</div>
     </div>
   );
 };
@@ -25,7 +25,7 @@ const GlowingButton = ({ children, ...props }) => {
       className="relative inline-flex h-14 overflow-hidden rounded-full bg-gradient-to-r from-blue-600 to-purple-600 p-[2px] hover:scale-105 transition-transform duration-300 shadow-lg"
       {...props}
     >
-      <span className="inline-flex h-full w-full items-center justify-center rounded-full bg-black px-8 py-2 text-white">
+      <span className="inline-flex h-full w-full items-center justify-center rounded-full bg-gray-900 px-8 py-2 text-white">
         {children}
       </span>
     </button>
@@ -52,13 +52,13 @@ const FeatureCard = ({ icon, title, description, delay }) => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay }}
-      className="bg-white rounded-xl shadow-md p-6 border border-gray-100"
+      className="bg-gray-900 rounded-xl shadow-md p-6 border border-gray-800"
     >
-      <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mb-4">
+      <div className="w-12 h-12 bg-blue-900 text-blue-300 rounded-full flex items-center justify-center mb-4">
         {icon}
       </div>
-      <h3 className="text-xl font-bold mb-2">{title}</h3>
-      <p className="text-gray-600">{description}</p>
+      <h3 className="text-xl font-bold mb-2 text-white">{title}</h3>
+      <p className="text-gray-400">{description}</p>
     </motion.div>
   );
 };
@@ -72,9 +72,9 @@ const HomePage = () => {
   }, []);
 
   return (
-    <div className="min-h-screen ">
+    <div className="min-h-screen text-white">
       {/* Hero section */}
-      {/* <div className="fixed top-0 z-[-2] h-screen w-screen bg-[#000000] bg-[radial-gradient(#ffffff33_1px,#00091d_1px)] bg-[size:20px_20px]"></div> */}
+      <div className="fixed top-0 z-[-2] h-screen w-screen bg-[#000000] bg-[radial-gradient(#ffffff33_1px,#00091d_1px)] bg-[size:20px_20px]"></div>
       {/* <div class="absolute inset-0 -z-10 h-full w-full items-center px-5 py-24 [background:radial-gradient(125%_125%_at_50%_10%,#000_40%,#63e_100%)]"></div> */}
       {/* <div className="relative h-full w-full bg-slate-950"><div className="absolute bottom-0 left-0 right-0 top-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div></div> */}
 
@@ -85,19 +85,19 @@ const HomePage = () => {
           transition={{ duration: 0.5 }}
           className="mx-auto"
         >
-          <div className="inline-block mb-4 px-4 py-1 rounded-full bg-blue-50 text-blue-700 text-sm font-medium">
+          <div className="inline-block mb-4 px-4 py-1 rounded-full bg-blue-900 text-blue-300 text-sm font-medium">
             Welcome to InterviewPrep AI
           </div>
         </motion.div>
         
         <RevealText>
-          <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">
+          <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">
             Master Your Next Interview
           </h1>
         </RevealText>
         
         <RevealText delay={0.1}>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-10">
+          <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-10">
             Practice with AI-powered mock interviews tailored to your specific job role.
             Get instant feedback and improve your interview skills.
           </p>
@@ -113,7 +113,7 @@ const HomePage = () => {
             
             {!isSignedIn && (
               <Link href="/sign-in">
-                <button className="inline-flex h-14 items-center justify-center rounded-full border-2 border-blue-600 px-8 py-2 text-blue-600 hover:bg-blue-50 transition-colors duration-300">
+                <button className="inline-flex h-14 items-center justify-center rounded-full border-2 border-blue-400 px-8 py-2 text-blue-400 hover:bg-blue-900 hover:bg-opacity-30 transition-colors duration-300">
                   Sign In
                 </button>
               </Link>
@@ -123,8 +123,8 @@ const HomePage = () => {
         
         {/* Preview image */}
         <BackgroundGradient className="max-w-4xl mx-auto">
-          <div className="h-64 sm:h-80 md:h-96 bg-gray-100 rounded-xl flex items-center justify-center">
-            <p className="text-gray-500">Interview Interface Preview</p>
+          <div className="h-64 sm:h-80 md:h-96 bg-gray-800 rounded-xl flex items-center justify-center">
+            <p className="text-gray-400">Interview Interface Preview</p>
           </div>
         </BackgroundGradient>
       </div>
@@ -132,7 +132,7 @@ const HomePage = () => {
       {/* Features section */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <RevealText>
-          <h2 className="text-3xl font-bold text-center mb-12">Why Choose InterviewPrep AI?</h2>
+          <h2 className="text-3xl font-bold text-center mb-12 text-white">Why Choose InterviewPrep AI?</h2>
         </RevealText>
         
         <div className="grid md:grid-cols-3 gap-8">
@@ -158,10 +158,10 @@ const HomePage = () => {
       </div>
       
       {/* Testimonials */}
-      <div className="bg-gray-50 py-16">
+      <div className=" py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <RevealText>
-            <h2 className="text-3xl font-bold text-center mb-12">What Our Users Say</h2>
+            <h2 className="text-3xl font-bold text-center mb-12 text-white">What Our Users Say</h2>
           </RevealText>
           
           <div className="grid md:grid-cols-2 gap-8">
@@ -169,36 +169,36 @@ const HomePage = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 20 }}
               transition={{ duration: 0.5, delay: 0.3 }}
-              className="bg-white p-6 rounded-xl shadow-md"
+              className="bg-gray-800 p-6 rounded-xl shadow-md"
             >
               <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4">
-                  <span className="text-blue-600 font-semibold">JD</span>
+                <div className="w-12 h-12 bg-blue-900 rounded-full flex items-center justify-center mr-4">
+                  <span className="text-blue-300 font-semibold">JD</span>
                 </div>
                 <div>
-                  <h3 className="font-semibold">Jane Doe</h3>
-                  <p className="text-sm text-gray-500">Software Engineer</p>
+                  <h3 className="font-semibold text-white">Jane Doe</h3>
+                  <p className="text-sm text-gray-400">Software Engineer</p>
                 </div>
               </div>
-              <p className="text-gray-700">&quot;This platform helped me prepare for my technical interviews. The AI feedback was remarkably insightful!&quot;</p>
+              <p className="text-gray-300">&quot;This platform helped me prepare for my technical interviews. The AI feedback was remarkably insightful!&quot;</p>
             </motion.div>
             
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 20 }}
               transition={{ duration: 0.5, delay: 0.4 }}
-              className="bg-white p-6 rounded-xl shadow-md"
+              className="bg-gray-800 p-6 rounded-xl shadow-md"
             >
               <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4">
-                  <span className="text-blue-600 font-semibold">JS</span>
+                <div className="w-12 h-12 bg-blue-900 rounded-full flex items-center justify-center mr-4">
+                  <span className="text-blue-300 font-semibold">JS</span>
                 </div>
                 <div>
-                  <h3 className="font-semibold">John Smith</h3>
-                  <p className="text-sm text-gray-500">Product Manager</p>
+                  <h3 className="font-semibold text-white">John Smith</h3>
+                  <p className="text-sm text-gray-400">Product Manager</p>
                 </div>
               </div>
-              <p className="text-gray-700">&quot;I landed my dream job after practicing with InterviewPrep AI. The tailored questions and feedback were game-changers.&quot;</p>
+              <p className="text-gray-300">&quot;I landed my dream job after practicing with InterviewPrep AI. The tailored questions and feedback were game-changers.&quot;</p>
             </motion.div>
           </div>
         </div>
@@ -207,11 +207,11 @@ const HomePage = () => {
       {/* CTA section */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
         <RevealText>
-          <h2 className="text-3xl font-bold mb-6">Ready to Ace Your Next Interview?</h2>
+          <h2 className="text-3xl font-bold mb-6 text-white">Ready to Ace Your Next Interview?</h2>
         </RevealText>
         
         <RevealText delay={0.1}>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
+          <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-8">
             Join thousands of job seekers who have improved their interview skills and landed their dream jobs.
           </p>
         </RevealText>
@@ -228,4 +228,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage; 
+export default HomePage;
