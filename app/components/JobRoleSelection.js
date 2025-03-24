@@ -232,16 +232,42 @@ const JobRoleSelection = () => {
             </button>
           </div>
 
-          <div className="mt-6 text-sm text-gray-500">
-            <p className="mb-2">Your interview will include:</p>
-            <ul className="list-disc pl-5 space-y-1">
-              <li>Role-specific technical questions</li>
-              <li>Behavioral questions tailored to your experience level</li>
-              <li>Problem-solving scenarios</li>
-              <li>{company ? `Questions specific to ${company}'s interview style` : 'Industry-relevant questions'}</li>
-              <li>Feedback on your responses</li>
-            </ul>
-          </div>
+          <div className="mt-6 pt-6 border-t border-gray-300">
+  <p className="mb-2 text-gray-700 text-sm">Your interview will include:</p>
+  <ul className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
+    <li className="flex items-center text-gray-600">
+      <svg className="w-4 h-4 mr-2 text-blue-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
+      </svg>
+      Role-specific technical questions
+    </li>
+    <li className="flex items-center text-gray-600">
+      <svg className="w-4 h-4 mr-2 text-blue-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
+      </svg>
+      Behavioral questions for your level
+    </li>
+    <li className="flex items-center text-gray-600">
+      <svg className="w-4 h-4 mr-2 text-blue-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
+      </svg>
+      Problem-solving scenarios
+    </li>
+    <li className="flex items-center text-gray-600">
+      <svg className="w-4 h-4 mr-2 text-blue-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
+      </svg>
+      {company ? `Questions specific to ${company}'s style` : 'Industry-relevant questions'}
+    </li>
+    <li className="flex items-center text-gray-600">
+      <svg className="w-4 h-4 mr-2 text-blue-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
+      </svg>
+      Feedback on your responses
+    </li>
+  </ul>
+</div>
+
         </div>
       </div>
     </div>
