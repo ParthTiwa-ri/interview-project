@@ -248,9 +248,9 @@ const FaceDetection = ({ onMaxWarningsReached }) => {
       )}
       
       {/* Warning count indicator - moved under webcam */}
-      <div className="absolute top-24 right-4 bg-gray-100 px-3 py-1 rounded-md text-xs font-medium border border-gray-300">
+      {/* <div className="absolute top-24 right-4 bg-gray-100 px-3 py-1 rounded-md text-xs font-medium border border-gray-300">
         Warnings: {warningCount}/{MAX_WARNINGS}
-      </div>
+      </div> */}
 
       {/* Status indicator - moved to right side and made more compact */}
       <div className={`absolute top-32 right-4 px-2 py-1 rounded-md text-xs font-medium flex items-center ${isLookingAway ? 'bg-red-100 text-red-700 border border-red-300' : 'bg-green-100 text-green-700 border border-green-300'}`}>
