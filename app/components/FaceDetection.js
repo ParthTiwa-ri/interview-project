@@ -219,7 +219,7 @@ const FaceDetection = ({ onMaxWarningsReached, onReady }) => {
           <AlertTriangle className="mr-2" />
           <strong>Camera access required</strong>
         </div>
-        <p>Please allow camera access to continue with the interview. The system needs to verify you're not looking away during the interview.</p>
+        <p>Please allow camera access to continue with the interview. The system needs to verify you&apos;re not looking away during the interview.</p>
       </div>
     );
   }
