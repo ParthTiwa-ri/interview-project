@@ -10,7 +10,7 @@ export async function saveInterviewFeedback(data) {
   try {
     const { jobRole, questions, answers, scores, userId, industry = "Technology", company = "" } = data;
 
-    // Calculate total score
+    
     let totalScoreSum = 0;
     let scoredQuestionsCount = 0;
 
@@ -26,7 +26,7 @@ export async function saveInterviewFeedback(data) {
         ? Math.round((totalScoreSum / scoredQuestionsCount) * 10) / 10
         : 0;
 
-    // Create interview session
+   
     const session = await prisma.interviewSession.create({
       data: {
         jobRole,
@@ -52,11 +52,11 @@ export async function saveInterviewFeedback(data) {
     });
 
     try {
-      // Revalidate related path(s) to update UI
+      
       revalidatePath("/interviews");
       revalidatePath(`/interviews/${session.id}`);
     } catch (revalidateError) {
-      // If revalidation fails, log it but don't fail the whole operation
+      
       console.error("Error revalidating paths:", revalidateError);
     }
 
@@ -76,14 +76,14 @@ export async function saveInterviewFeedback(data) {
 
 export async function createUserFromClerk(clerkData) {
   try {
-    // Check if user already exists based on Clerk ID
+    
     let user = await prisma.user.findUnique({
       where: {
         clerkId: clerkData.id,
       },
     });
     
-    // If user doesn't exist, create a new one
+    
     if (!user) {
       user = await prisma.user.create({
         data: {
@@ -222,7 +222,7 @@ export async function deleteInterviewSession(sessionId) {
       };
     }
 
-    // Delete the session and its related responses (cascading delete should handle this if set up in schema)
+   
     await prisma.interviewSession.delete({
       where: {
         id: sessionId
