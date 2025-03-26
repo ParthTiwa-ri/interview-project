@@ -4,6 +4,7 @@ import { InterviewProvider } from "./context/InterviewContext";
 import JobRoleSelection from "./components/JobRoleSelection";
 import InterviewQuestions from "./components/InterviewQuestions";
 import ResultsSummary from "./components/ResultsSummary";
+import CameraCheck from "./components/CameraCheck";
 import HomePage from "./components/HomePage";
 import { useInterviewContext } from "./context/InterviewContext";
 import { useUser } from "@clerk/nextjs";
@@ -35,6 +36,7 @@ const InterviewContent = () => {
   return (
     <div className="pt-4">
       {currentStep === "role" && <JobRoleSelection />}
+      {currentStep === "cameraCheck" && <CameraCheck />}
       {currentStep === "questions" && <InterviewQuestions />}
       {currentStep === "summary" && <ResultsSummary />}
     </div>

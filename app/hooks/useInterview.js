@@ -26,6 +26,8 @@ export const useInterview = () => {
   const [dbUserId, setDbUserId] = useState(null);
   const [maxWarningsReached, setMaxWarningsReached] = useState(false);
   const [testTerminated, setTestTerminated] = useState(false);
+  const [questionsGenerated, setQuestionsGenerated] = useState(false);
+  const [cameraReady, setCameraReady] = useState(false);
 
   // Get user from Clerk
   const { user, isLoaded, isSignedIn } = useUser();
@@ -77,8 +79,12 @@ export const useInterview = () => {
         });
         setAnswers(initialAnswers);
         
-        // Move to question mode
-        setCurrentStep("questions");
+        // Flag that questions are ready, but don't move to question step yet
+        // We'll wait for camera to be ready first
+        setQuestionsGenerated(true);
+        
+        // Move to camera check mode
+        setCurrentStep("cameraCheck");
       } else {
         setError(result.error || "Failed to generate questions. Please try again.");
       }
@@ -243,6 +249,17 @@ export const useInterview = () => {
     setError("Interview terminated due to too many attention warnings. Please focus during the interview.");
   }, []);
 
+  // Function to handle when camera and face detection are ready
+  const handleCameraReady = useCallback(() => {
+    console.log("Camera and face detection are ready!");
+    setCameraReady(true);
+    
+    // If questions are already generated, move to interview questions
+    if (questionsGenerated) {
+      setCurrentStep("questions");
+    }
+  }, [questionsGenerated]);
+
   return {
     // State
     jobRole,
@@ -262,6 +279,8 @@ export const useInterview = () => {
     user,
     isLoaded,
     isSignedIn,
+    cameraReady,
+    questionsGenerated,
 
     // Actions
     setJobRole,
@@ -273,5 +292,6 @@ export const useInterview = () => {
     resetInterview,
     getTotalScore,
     handleMaxWarningsReached,
+    handleCameraReady,
   };
 }; 

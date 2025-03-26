@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { AlertTriangle } from 'lucide-react';
 import * as faceapi from 'face-api.js';
 
-const FaceDetection = ({ onMaxWarningsReached }) => {
+const FaceDetection = ({ onMaxWarningsReached, onReady }) => {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const [stream, setStream] = useState(null);
@@ -13,13 +13,16 @@ const FaceDetection = ({ onMaxWarningsReached }) => {
   const [showWarning, setShowWarning] = useState(false);
   const [permissionDenied, setPermissionDenied] = useState(false);
   const [modelsLoaded, setModelsLoaded] = useState(false);
+  const [faceDetected, setFaceDetected] = useState(false);
+  const [isReady, setIsReady] = useState(false);
   
   const lookAwayTimerRef = useRef(null);
   const detectionsRef = useRef([]);
   const detectionIntervalRef = useRef(null);
+  const readyNotifiedRef = useRef(false);
   
   const MAX_WARNINGS = 3;
-  const LOOK_AWAY_THRESHOLD = 2000; // 3 seconds threshold for looking away
+  const LOOK_AWAY_THRESHOLD = 2000; // 2 seconds threshold for looking away
 
   useEffect(() => {
     const loadModels = async () => {
@@ -79,6 +82,21 @@ const FaceDetection = ({ onMaxWarningsReached }) => {
     }
   };
 
+  // Update readiness state when all conditions are met
+  useEffect(() => {
+    if (modelsLoaded && faceDetected && !isLookingAway && !readyNotifiedRef.current) {
+      setIsReady(true);
+      
+      // Only notify once to prevent multiple calls
+      if (!readyNotifiedRef.current && onReady) {
+        readyNotifiedRef.current = true;
+        onReady();
+      }
+    } else if ((!faceDetected || isLookingAway) && isReady) {
+      setIsReady(false);
+    }
+  }, [modelsLoaded, faceDetected, isLookingAway, isReady, onReady]);
+
   const startFaceDetection = () => {
     if (!videoRef.current || !modelsLoaded) return;
     
@@ -102,26 +120,15 @@ const FaceDetection = ({ onMaxWarningsReached }) => {
           
           detectionsRef.current = detections;
           
-          // Draw face detection box for visual feedback
-          // if (canvasRef.current) {
-          //   const displaySize = { 
-          //     width: videoRef.current.videoWidth, 
-          //     height: videoRef.current.videoHeight 
-          //   };
-          //   faceapi.matchDimensions(canvasRef.current, displaySize);
-            
-          //   const resizedDetections = faceapi.resizeResults(detections, displaySize);
-          //   const ctx = canvasRef.current.getContext('2d');
-          //   ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-          //   faceapi.draw.drawDetections(canvasRef.current, resizedDetections);
-          // }
-
           // Directly check if face is detected
-          const faceDetected = detections.length > 0;
-          console.log(`Face detected: ${faceDetected}`);
+          const isFaceVisible = detections.length > 0;
+          console.log(`Face detected: ${isFaceVisible}`);
+          
+          // Update face detection state
+          setFaceDetected(isFaceVisible);
           
           // Update user attention state
-          if (!faceDetected && !isLookingAway) {
+          if (!isFaceVisible && !isLookingAway) {
             // User has started looking away
             console.log('User is looking away - starting timer');
             setIsLookingAway(true);
@@ -135,7 +142,7 @@ const FaceDetection = ({ onMaxWarningsReached }) => {
               console.log('Look away threshold reached - triggering warning');
               triggerWarning();
             }, LOOK_AWAY_THRESHOLD);
-          } else if (faceDetected && isLookingAway) {
+          } else if (isFaceVisible && isLookingAway) {
             // User has returned
             console.log('User returned - canceling timer');
             setIsLookingAway(false);
@@ -212,7 +219,7 @@ const FaceDetection = ({ onMaxWarningsReached }) => {
           <AlertTriangle className="mr-2" />
           <strong>Camera access required</strong>
         </div>
-        <p>Please allow camera access to continue with the interview. The system needs to verify youre not looking away during the interview.</p>
+        <p>Please allow camera access to continue with the interview. The system needs to verify you're not looking away during the interview.</p>
       </div>
     );
   }
@@ -253,10 +260,17 @@ const FaceDetection = ({ onMaxWarningsReached }) => {
       </div> */}
 
       {/* Status indicator - moved to right side and made more compact */}
-      <div className={`absolute top-32 right-4 px-2 py-1 rounded-md text-xs font-medium flex items-center ${isLookingAway ? 'bg-red-100 text-red-700 border border-red-300' : 'bg-green-100 text-green-700 border border-green-300'}`}>
-        <div className={`w-2 h-2 rounded-full mr-1 ${isLookingAway ? 'bg-red-500' : 'bg-green-500'}`}></div>
-        {isLookingAway ? 'Looking away' : 'Face detected'}
+      <div className={`absolute top-32 right-4 px-2 py-1 rounded-md text-xs font-medium flex items-center ${isLookingAway ? 'bg-red-100 text-red-700 border border-red-300' : faceDetected ? 'bg-green-100 text-green-700 border border-green-300' : 'bg-yellow-100 text-yellow-700 border border-yellow-300'}`}>
+        <div className={`w-2 h-2 rounded-full mr-1 ${isLookingAway ? 'bg-red-500' : faceDetected ? 'bg-green-500' : 'bg-yellow-500'}`}></div>
+        {isLookingAway ? 'Looking away' : faceDetected ? 'Face detected' : 'Waiting for face'}
       </div>
+      
+      {/* Readiness status */}
+      {/* {!isReady && (
+        <div className="absolute top-40 right-4 px-2 py-1 rounded-md text-xs font-medium bg-blue-100 text-blue-700 border border-blue-300">
+          {!modelsLoaded ? 'Loading models...' : !faceDetected ? 'Please face the camera' : 'Getting ready...'}
+        </div>
+      )} */}
     </div>
   );
 };

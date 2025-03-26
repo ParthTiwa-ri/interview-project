@@ -87,7 +87,10 @@ const InterviewQuestions = () => {
         {!testTerminated && (
           <div className="bg-white rounded-2xl shadow-xl p-8 mb-8 relative">
             <div className="absolute top-0 right-0 mt-2 mr-2">
-              <FaceDetection onMaxWarningsReached={handleMaxWarningsReached} />
+              <FaceDetection 
+                onMaxWarningsReached={handleMaxWarningsReached} 
+                onReady={() => {}}
+              />
             </div>
             
             <div className="flex items-start space-x-4 pr-28">
