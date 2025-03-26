@@ -1,5 +1,5 @@
 "use client";
-
+import { Analytics } from '@vercel/analytics/next';
 import { Geist, Geist_Mono } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import { usePathname } from "next/navigation";
@@ -42,6 +42,7 @@ export default function RootLayout({ children }) {
           {!hideNavbar && <Navbar />}
           <main className="min-h-screen">
             {children}
+            <Analytics />
           </main>
         </body>
       </html>
