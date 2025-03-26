@@ -227,7 +227,7 @@ const FaceDetection = ({ onMaxWarningsReached, onReady }) => {
   return (
     <div className="relative">
       {/* Webcam feed in top-right corner - moved further to the edge and made smaller */}
-      <div className="absolute top-4 right-4 w-24 h-18 rounded-lg overflow-hidden border-2 border-blue-500 bg-gray-100 shadow-lg z-10">
+      <div className="absolute top-4 right-4 w-28 h-20 rounded-lg overflow-hidden border-2 border-blue-500 bg-gray-100 shadow-lg z-10">
         <video 
           ref={videoRef}
           autoPlay

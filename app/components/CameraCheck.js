@@ -47,13 +47,13 @@ const CameraCheck = () => {
           </div>
           
           <div className="w-full flex items-center justify-center">
-            <div className="relative w-64 h-48 bg-gray-100 rounded-lg border-2 border-blue-500 overflow-hidden">
+            <div className="relative w-64 h-48 bg-gray-100 rounded-lg border-2 border-blue-500 overflow-hidden ">
               <FaceDetection 
                 onMaxWarningsReached={() => {}} 
                 onReady={handleCameraReady} 
               />
               <div className="absolute inset-0 flex items-center justify-center">
-                {!cameraReady && (
+                {/* {!cameraReady && (
                   <div className="p-3 bg-white bg-opacity-80 rounded-lg shadow-md">
                     <div className="animate-pulse flex space-x-2 items-center">
                       <div className="h-3 w-3 bg-blue-600 rounded-full"></div>
@@ -62,7 +62,7 @@ const CameraCheck = () => {
                       <span className="text-sm font-medium text-gray-700">Waiting for camera...</span>
                     </div>
                   </div>
-                )}
+                )} */}
               </div>
             </div>
           </div>
