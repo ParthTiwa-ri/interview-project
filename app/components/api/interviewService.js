@@ -179,7 +179,9 @@ IMPORTANT SCORING GUIDELINES:
 
 Be very strict with your scoring. If the answer is incomplete, generic, or demonstrates poor understanding, it must receive a low score (1-3). NEVER give a high score (7+) to brief or incomplete answers.
 
-Include strengths ONLY if they are genuinely present in the response. For answers scoring below 4, the "strengths" array may be empty.
+CRITICAL: Do NOT invent details, technologies, tools, or approaches that the candidate did not explicitly mention in their answer. Only reference what was actually said in the answer. For example, if the candidate did not mention "Tableau" or "React" or any specific technology, do not include these in your feedback.
+
+Include strengths ONLY if they are genuinely present in the response. For answers scoring below 4, the "strengths" array may be empty or include only basic observations like "attempted to answer the question".
 
 Return a JSON object with the following structure:
 {
@@ -187,14 +189,14 @@ Return a JSON object with the following structure:
     {
       "id": "${questions[0]?.id || "q1"}",
       "score": 7,
-      "feedback": "Detailed feedback here that directly references content from the answer",
+      "feedback": "Detailed feedback here that directly references content from the answer, without inventing details",
       "strengths": ["Strength 1", "Strength 2"],
       "areas_to_improve": ["Area 1", "Area 2"]
     },
     {
       "id": "${questions[1]?.id || "q2"}",
       "score": 8,
-      "feedback": "Detailed feedback here that directly references content from the answer",
+      "feedback": "Detailed feedback here that directly references content from the answer, without inventing details",
       "strengths": ["Strength 1", "Strength 2"],
       "areas_to_improve": ["Area 1", "Area 2"]
     }
@@ -261,28 +263,55 @@ Only return the JSON object, no other text.
         const questionId = qf.id;
         const answer = answers[questionId] || "";
         
-        // Check if answer is very short but got a high score (potential AI scoring issue)
-        if (answer.length < 50 && qf.score > 6) {
-          console.warn(`Suspicious scoring detected: Short answer (${answer.length} chars) got high score (${qf.score})`);
-          // Adjust the score to be more reasonable
-          qf.score = Math.min(qf.score, 3);
+        // Detect placeholder/non-answers with specific phrases or very short length
+        const placeholderPhrases = [
+          "know this answer", 
+          "i know", 
+          "i know this", 
+          "ok", 
+          "okay", 
+          "yes",
+          "no"
+        ];
+        
+        const isPlaceholder = answer.length < 30 || 
+          placeholderPhrases.some(phrase => 
+            answer.toLowerCase().includes(phrase.toLowerCase()) && answer.length < 50
+          );
+        
+        // If placeholder/very short answer OR short answer with high score, override the score and feedback
+        if (isPlaceholder || (answer.length < 80 && qf.score > 4)) {
+          console.warn(`Suspicious scoring detected: Short/placeholder answer (${answer.length} chars) with content "${answer}" got score (${qf.score})`);
           
-          // Adjust feedback to be more accurate
-          if (!qf.feedback.includes("incomplete") && !qf.feedback.includes("brief")) {
-            qf.feedback = `The answer is too brief and lacks necessary detail. ${qf.feedback}`;
-          }
+          // Override with appropriate low score
+          qf.score = Math.min(qf.score, isPlaceholder ? 2 : 3);
           
-          // Adjust strengths if needed
+          // Clear any strengths that don't make sense for a placeholder answer
           if (qf.strengths && qf.strengths.length > 0) {
-            qf.strengths = ["Attempted to answer the question"];
+            const validStrength = ["attempted to answer"];
+            qf.strengths = validStrength;
           }
           
-          // Ensure areas to improve reflects the brevity
-          if (qf.areas_to_improve) {
-            if (!qf.areas_to_improve.some(area => 
-                area.includes("detail") || area.includes("elaborate") || area.includes("expand"))) {
-              qf.areas_to_improve.push("Provide much more detail and specific examples");
-            }
+          // Generate appropriate feedback that doesn't falsely praise the answer
+          qf.feedback = `The answer is too brief and lacks necessary detail. ${
+            answer.length < 15 ? "Please provide a complete answer that addresses the question." : 
+            "To improve, you should provide specific examples and elaborate on your experience and approach."
+          }`;
+          
+          // Set appropriate areas to improve
+          qf.areas_to_improve = [
+            "Provide much more detail and specific examples",
+            "Elaborate on your technical approach and methods used",
+            "Include information about challenges faced and how you overcame them"
+          ];
+          
+          // Make sure the feedback doesn't falsely claim tools or technologies that weren't mentioned
+          if (qf.feedback.includes("Tableau") && !answer.toLowerCase().includes("tableau")) {
+            qf.feedback = qf.feedback.replace(/\b(mentioned|discussed|described|used|utilizing|leveraged) Tableau\b/gi, "should consider using appropriate visualization tools like Tableau");
+          }
+          
+          if (qf.feedback.includes("clear and detailed") || qf.feedback.includes("comprehensive")) {
+            qf.feedback = qf.feedback.replace(/(clear and detailed|comprehensive|excellent|well-articulated|well-structured|thorough)/gi, "incomplete");
           }
         }
         
