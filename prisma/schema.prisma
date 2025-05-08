@@ -14,6 +14,8 @@ model User {
   email          String?           @unique
   clerkId        String?           @unique
   interviewSessions InterviewSession[]
+  resume         Resume?
+  jobApplications JobApplication[]
   createdAt      DateTime          @default(now())
   updatedAt      DateTime          @updatedAt
 
@@ -50,4 +52,46 @@ model QuestionResponse {
   updatedAt          DateTime        @updatedAt
 
   @@map("question_responses")
+}
+
+model Resume {
+  id          String   @id @default(uuid())
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  resumeData  Json
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("resumes")
+}
+
+model JobApplication {
+  id              String   @id @default(uuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  company         String
+  position        String
+  location        String?
+  salary          String?
+  jobDescription  String?  @db.Text
+  applicationDate String?
+  status          String   @default("saved")
+  notes           String?  @db.Text
+  contactName     String?
+  contactEmail    String?
+  contactPhone    String?
+  interviewDate   String?
+  followUpDate    String?
+  resumeUsed      String?
+  coverLetterUsed String?
+  url             String?
+  deadline        String?
+  isRemote        Boolean  @default(false)
+  isFavorite      Boolean  @default(false)
+  tasks           Json?
+  statusHistory   Json?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@map("job_applications")
 }

@@ -1,3 +1,72 @@
+# InterviewPrep Application
+
+A comprehensive interview preparation platform that helps job seekers practice interviews and prepare their resumes.
+
+## Features
+
+### Interview Practice
+- Mock interviews with AI-powered feedback
+- Job role selection with tailored questions
+- Facial expression and tone analysis
+- Score-based feedback system
+- Interview history and performance tracking
+
+### Resume Builder
+- Create professional resumes with a user-friendly form interface
+- Preview your resume in a clean, formatted layout
+- Download your resume as a PDF
+- Save your resume data for future editing
+- Multiple resume sections: personal info, education, experience, skills, projects, and certifications
+
+## Technologies Used
+- Next.js
+- React
+- MongoDB
+- Tailwind CSS
+- Clerk Authentication
+- PDF Generation (html2pdf.js)
+
+## Getting Started
+
+### Prerequisites
+- Node.js 16+ and npm
+- MongoDB instance
+
+### Installation
+1. Clone the repository
+```bash
+git clone https://github.com/yourusername/interviewprep.git
+cd interviewprep
+```
+
+2. Install dependencies
+```bash
+npm install
+```
+
+3. Set up environment variables (create a `.env.local` file based on `.env.example`)
+
+4. Run the development server
+```bash
+npm run dev
+```
+
+5. Open [http://localhost:3000](http://localhost:3000) in your browser to see the application
+
+## Using the Resume Builder
+
+1. Navigate to the Resume Builder section
+2. Fill out the form with your personal information, education, work experience, skills, and projects
+3. Submit the form to save your data
+4. Preview your resume in a professional format
+5. Download your resume as a PDF or save the data as JSON for future editing
+
+## Contributing
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+This project is licensed under the ISC License.
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started

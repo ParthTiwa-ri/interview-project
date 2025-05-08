@@ -1,25 +1,22 @@
 "use client";
 
-import { HfInference } from "@huggingface/inference";
 import { saveInterviewFeedback } from "../../../actions/action";
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+
+const genAI = new GoogleGenerativeAI(process.env.NEXT_PUBLIC_GEMINI_API_KEY);
 
 // Service for generating interview questions
 export const generateInterviewQuestions = async (jobRole, experienceLevel = "Mid-Level", industry = "Technology", company = "") => {
   try {
-    const client = new HfInference(process.env.NEXT_PUBLIC_HF_TOKEN);
-
+    // Initialize Gemini AI with the 1.5 Flash model
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
    
     let companySpecificContent = "";
     if (company) {
       companySpecificContent = `The candidate is interviewing at ${company}. Include questions that reflect ${company}'s known interview style and company values.`;
     }
 
-    const chatCompletion = await client.chatCompletion({
-      model: "mistralai/Mistral-7B-Instruct-v0.2",
-      messages: [
-        {
-          role: "user",
-          content: `Generate only 2 question realistic mock interview questions for a ${experienceLevel} ${jobRole} position in the ${industry} industry.
+    const prompt = `Generate only 2 question realistic mock interview questions for a ${experienceLevel} ${jobRole} position in the ${industry} industry.
 
 The questions should match the real-world expectations for a ${experienceLevel} candidate in this role and industry.
 ${companySpecificContent}
@@ -42,18 +39,13 @@ Format your response EXACTLY as a JSON array with each object having 'id' and 'q
   }
 ]
 
-Return ONLY the JSON array with no additional text, explanation, or formatting.`,
-        },
-      ],
-      provider: "hf-inference",
-      max_tokens: 800,
-    });
+Return ONLY the JSON array with no additional text, explanation, or formatting.`;
 
-   
-    const responseContent = chatCompletion.choices[0].message.content;
+    // Generate content with Gemini
+    const result = await model.generateContent(prompt);
+    const responseContent = result.response.text();
     console.log("Response from AI:", responseContent);
 
-    
     // Improved extraction of JSON content
     let jsonString;
     
@@ -142,8 +134,8 @@ export const generateInterviewFeedback = async (
   company = ""
 ) => {
   try {
-    const client = new HfInference(process.env.NEXT_PUBLIC_HF_TOKEN);
-
+    // Initialize Gemini AI with the 1.5 Flash model
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
     
     let companyContext = "";
     if (company) {
@@ -213,19 +205,9 @@ Return a JSON object with the following structure:
 Only return the JSON object, no other text.
     `;
 
-    const feedbackCompletion = await client.chatCompletion({
-      model: "mistralai/Mistral-7B-Instruct-v0.2",
-      messages: [
-        {
-          role: "user",
-          content: batchPrompt,
-        },
-      ],
-      provider: "hf-inference",
-      max_tokens: 1000,
-    });
-
-    const responseContent = feedbackCompletion.choices[0].message.content;
+    // Generate content with Gemini
+    const result = await model.generateContent(batchPrompt);
+    const responseContent = result.response.text();
     console.log("Feedback response:", responseContent);
 
     // Improved extraction of JSON content
@@ -347,6 +329,55 @@ Only return the JSON object, no other text.
   } catch (err) {
     console.error("Feedback generation error:", err);
     return { success: false, error: err.message };
+  }
+};
+
+// New server-side function for extracting key points from text
+export async function runPointWise(extractedText) {
+  try {
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+    const prompt = `Highlight key points and main ideas, ensuring the summary captures essential information. \n\n${extractedText} in json format only with keys as "keyPoints", "mainIdeas" and "details" and dont create nested keys. You must ensure the JSON being returned or displayed is pure JSON, without any extra characters.`;
+
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const summary = response.text(); // Summarized text
+
+    // Clean up the JSON string to ensure it's valid
+    let jsonString;
+    
+    // Try to find JSON within code blocks
+    const jsonMatch = summary.match(/```json\s*([\s\S]*?)\s*```/) ||
+                    summary.match(/```\s*([\s\S]*?)\s*```/);
+    
+    if (jsonMatch && jsonMatch[1]) {
+      jsonString = jsonMatch[1].trim();
+    } else {
+      // If no code blocks, try to find JSON object directly
+      const objectMatch = summary.match(/\{\s*"[\s\S]*"\s*:\s*[\s\S]*\}/);
+      if (objectMatch) {
+        jsonString = objectMatch[0];
+      } else {
+        // Last resort: take the whole text and clean it
+        jsonString = summary.trim();
+      }
+    }
+    
+    // Clean up the JSON string - remove any non-JSON text before or after
+    jsonString = jsonString.replace(/^[^[{]*/g, '').replace(/[^\]}]*$/g, '');
+    
+    try {
+      const parsedSummary = JSON.parse(jsonString);
+      return parsedSummary;
+    } catch (jsonError) {
+      console.error("JSON Parsing Error:", jsonError, "Raw string:", jsonString);
+      return { 
+        error: "Failed to parse AI response. Please try again." 
+      };
+    }
+  } catch (err) {
+    console.error("Point extraction error:", err);
+    return { error: err.message };
   }
 };
 
