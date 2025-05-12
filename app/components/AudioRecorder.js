@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useInterviewContext } from "../context/InterviewContext";
-import { Mic } from 'lucide-react';
+import { Mic, RotateCcw } from 'lucide-react';
 
 const AudioRecorder = ({ questionId, onAnswerChange }) => {
   const [isRecording, setIsRecording] = useState(false);
@@ -129,6 +129,17 @@ const AudioRecorder = ({ questionId, onAnswerChange }) => {
     }
   };
 
+  const resetAnswer = () => {
+    // Stop recording if active
+    if (isRecording) {
+      stopRecording();
+    }
+    // Clear the answer
+    setTranscript("");
+    transcriptRef.current = "";
+    onAnswerChange(currentQuestionIdRef.current, "");
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex items-center space-x-4">
@@ -147,6 +158,19 @@ const AudioRecorder = ({ questionId, onAnswerChange }) => {
             </div>
           ) : <div className="flex items-center gap-2"><Mic size={20}/>Start Recording</div>}
         </button>
+
+        {transcript && (
+          <button
+            onClick={resetAnswer}
+            className="px-4 py-3 rounded-full font-medium transition-all duration-200 bg-gray-100 hover:bg-gray-200 text-gray-700"
+            title="Reset Answer"
+          >
+            <div className="flex items-center gap-2">
+              <RotateCcw size={20}/>
+              Reset
+            </div>
+          </button>
+        )}
       </div>
 
       {transcript && (
