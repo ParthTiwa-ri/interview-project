@@ -3,7 +3,7 @@
 import { useRef } from 'react';
 import { generatePDF, generateJSON } from '../../utils/pdfGenerator';
 
-const ResumePreview = ({ resumeData, onEdit }) => {
+const ResumePreview = ({ resumeData, onEdit, onCreateCoverLetter }) => {
   const resumeRef = useRef(null);
   
   const handleDownloadPDF = async () => {
@@ -26,9 +26,9 @@ const ResumePreview = ({ resumeData, onEdit }) => {
   
   return (
     <div className="space-y-6">
-      <div className="bg-white p-6 rounded-xl shadow-md flex justify-between items-center">
+      <div className="bg-white p-6 rounded-xl shadow-md flex flex-col sm:flex-row justify-between items-center gap-3">
         <h2 className="text-xl font-bold text-gray-800">Resume Preview</h2>
-        <div className="flex space-x-3">
+        <div className="flex flex-wrap gap-3 justify-center">
           <button
             onClick={onEdit}
             className="px-4 py-2 border border-blue-600 text-blue-600 rounded hover:bg-blue-50"
@@ -43,9 +43,15 @@ const ResumePreview = ({ resumeData, onEdit }) => {
           </button>
           <button
             onClick={handleDownloadJSON}
-            className="px-4 py-2 bg-gray-800 text-white rounded hover:bg-gray-900"
+            className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
           >
-            Save Data
+            Download JSON
+          </button>
+          <button
+            onClick={onCreateCoverLetter}
+            className="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700"
+          >
+            Create Cover Letter
           </button>
         </div>
       </div>

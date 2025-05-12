@@ -17,3 +17,52 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Print styles for the cover letter */
+@media print {
+  /* Hide all other page elements */
+  body > *:not(main),
+  main > *:not(.container) {
+    display: none !important;
+  }
+  
+  /* Only show the cover letter content and hide the page title/header */
+  .container > h1 {
+    display: none !important;
+  }
+  
+  /* Format the cover letter container */
+  .space-y-6 > div:first-child {
+    display: none !important;
+  }
+  
+  /* Format the cover letter content */
+  .font-serif {
+    font-family: 'Times New Roman', Times, serif !important;
+    font-size: 12pt !important;
+    line-height: 1.5 !important;
+  }
+  
+  /* Ensure page breaks don't happen in the middle of elements */
+  .space-y-6 > div {
+    page-break-inside: avoid;
+  }
+  
+  /* Make sure personal info is visible */
+  .space-y-6 .text-center {
+    display: block !important;
+    visibility: visible !important;
+  }
+  
+  /* Remove any margins from the print container */
+  .container {
+    margin: 0 !important;
+    padding: 0 !important;
+    max-width: 100% !important;
+  }
+  
+  /* Set page margins */
+  @page {
+    margin: 0.5in;
+  }
+}
